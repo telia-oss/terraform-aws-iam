@@ -2,40 +2,31 @@ provider "aws" {
   region = "eu-west-1"
 }
 
-module "user" {
+module "admin" {
   source = "../../modules/user"
 
-  username = "first.last"
-  keybase  = "itsdalmo"
-}
-
-module "role" {
-  source           = "../../modules/role"
-  prefix           = "example-project-developer"
-  trusted_account  = "<user-account>"
-  role_description = "example role created to show iam/role module in use"
-
-  users = [
-    "first.last",
-  ]
+  name    = "first.last.admin"
+  path    = "/admins/"
+  keybase = "itsdalmo"
 }
 
 module "developer" {
-  source          = "../../modules/developer"
-  prefix          = "example-project"
-  trusted_account = "<user-account>"
+  source = "../../modules/user"
 
-  users = [
-    "first.last",
-  ]
+  name    = "first.last.developer"
+  path    = "/developer/"
+  keybase = "itsdalmo"
 }
 
-module "admin" {
-  source          = "../../modules/admin"
-  prefix          = "example-project"
+module "roles" {
+  source          = "../../modules/roles"
   trusted_account = "<user-account>"
 
-  users = [
-    "first.last",
+  admin_users = [
+    "first.last.admin",
+  ]
+
+  view_only_users = [
+    "first.last.developer",
   ]
 }

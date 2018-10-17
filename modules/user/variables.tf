@@ -1,15 +1,15 @@
 # ------------------------------------------------------------------------------
 # Variables
 # ------------------------------------------------------------------------------
-variable "username" {
-  description = "Desired name for the IAM user."
+variable "name" {
+  description = "The user's name. The name must consist of upper and lowercase alphanumeric characters with no spaces."
+}
+
+variable "path" {
+  description = "Path in which to create the user."
+  default     = "/"
 }
 
 variable "keybase" {
-  description = "Keybase username. Used to encrypt password and access key."
-}
-
-variable "ssh_key" {
-  description = "Public SSH key for the user. Exported for use in other modules."
-  default     = ""
+  description = "Keybase username in the form keybase:username."
 }

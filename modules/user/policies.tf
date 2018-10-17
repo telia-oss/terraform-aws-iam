@@ -1,15 +1,44 @@
-data "aws_iam_policy_document" "inspect" {
+data "aws_iam_policy_document" "iam_self_management" {
   statement {
     effect = "Allow"
 
     actions = [
-      "iam:GetUser",
+      "iam:ListAccountAliases",
+      "iam:ListUsers",
+      "iam:ListVirtualMFADevices",
+      "iam:GetAccountPasswordPolicy",
+      "iam:GetAccountSummary",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "iam:ChangePassword",
+      "iam:CreateAccessKey",
+      "iam:CreateLoginProfile",
+      "iam:DeleteAccessKey",
+      "iam:DeleteLoginProfile",
       "iam:GetLoginProfile",
-      "iam:GetUserPolicy",
-      "iam:GetAccessKeyLastUsed",
+      "iam:ListAccessKeys",
+      "iam:UpdateAccessKey",
+      "iam:UpdateLoginProfile",
+      "iam:ListSigningCertificates",
+      "iam:DeleteSigningCertificate",
+      "iam:UpdateSigningCertificate",
+      "iam:UploadSigningCertificate",
+      "iam:ListSSHPublicKeys",
+      "iam:GetSSHPublicKey",
+      "iam:DeleteSSHPublicKey",
+      "iam:UpdateSSHPublicKey",
+      "iam:UploadSSHPublicKey",
     ]
 
     resources = [
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*/$${aws:username}",
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/$${aws:username}",
     ]
   }
@@ -18,30 +47,11 @@ data "aws_iam_policy_document" "inspect" {
     effect = "Allow"
 
     actions = [
-      "iam:GetPolicyVersion",
-      "iam:GetAccountSummary",
-      "iam:GetAccountPasswordPolicy",
+      "iam:ListMFADevices",
     ]
 
     resources = [
-      "*",
-    ]
-  }
-}
-
-data "aws_iam_policy_document" "manage" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "iam:ChangePassword",
-      "iam:UpdateLoginProfile",
-      "iam:CreateAccessKey",
-      "iam:DeleteAccessKey",
-      "iam:UpdateAccessKey",
-    ]
-
-    resources = [
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*/$${aws:username}",
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/$${aws:username}",
     ]
   }
@@ -51,12 +61,13 @@ data "aws_iam_policy_document" "manage" {
 
     actions = [
       "iam:CreateVirtualMFADevice",
+      "iam:DeleteVirtualMFADevice",
       "iam:EnableMFADevice",
       "iam:ResyncMFADevice",
-      "iam:DeleteVirtualMFADevice",
     ]
 
     resources = [
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*/$${aws:username}",
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/$${aws:username}",
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:mfa/$${aws:username}",
     ]
@@ -70,6 +81,7 @@ data "aws_iam_policy_document" "manage" {
     ]
 
     resources = [
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*/$${aws:username}",
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/$${aws:username}",
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:mfa/$${aws:username}",
     ]
@@ -86,18 +98,38 @@ data "aws_iam_policy_document" "manage" {
       values   = ["3600"]
     }
   }
-}
 
-data "aws_iam_policy_document" "assume" {
   statement {
-    effect = "Allow"
+    effect = "Deny"
 
-    actions = [
-      "sts:AssumeRole",
+    not_actions = [
+      "iam:ChangePassword",
+      "iam:CreateLoginProfile",
+      "iam:CreateVirtualMFADevice",
+      "iam:DeleteVirtualMFADevice",
+      "iam:ListVirtualMFADevices",
+      "iam:EnableMFADevice",
+      "iam:ResyncMFADevice",
+      "iam:ListAccountAliases",
+      "iam:ListUsers",
+      "iam:ListSSHPublicKeys",
+      "iam:ListAccessKeys",
+      "iam:ListServiceSpecificCredentials",
+      "iam:ListMFADevices",
+      "iam:GetAccountSummary",
+      "sts:GetSessionToken",
     ]
 
-    not_resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/*",
+    resources = [
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*/$${aws:username}",
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/$${aws:username}",
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:mfa/$${aws:username}",
     ]
+
+    condition = {
+      test     = "Bool"
+      variable = "aws:MultiFactorAuthPresent"
+      values   = ["false"]
+    }
   }
 }
