@@ -18,8 +18,8 @@ module "developer" {
   keybase = "itsdalmo"
 }
 
-module "roles" {
-  source          = "../../modules/roles"
+module "user_roles" {
+  source          = "../../modules/user-roles"
   trusted_account = "<user-account>"
 
   admin_users = [
@@ -31,7 +31,7 @@ module "roles" {
   ]
 }
 
-module "machine" {
+module "machine_role" {
   source = "../../modules/machine-role"
   name   = "machine-user-role"
 
