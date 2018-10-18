@@ -11,5 +11,5 @@ variable "path" {
 }
 
 variable "keybase" {
-  description = "Keybase username in the form keybase:username."
+  description = "Keybase username used to encrypt the user's initial password."
 }

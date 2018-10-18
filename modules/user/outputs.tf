@@ -1,7 +1,19 @@
 # ------------------------------------------------------------------------------
 # Output
 # ------------------------------------------------------------------------------
+output "name" {
+  description = "The user's name."
+  value       = "${aws_iam_user.main.name}"
+}
+
+output "keybase" {
+  description = "Keybase username used to encrypt the user's initial password."
+  value       = "${var.keybase}"
+}
+
 output "instructions" {
+  description = "User instructions for doing the initial setup of MFA and securing AWS credentials."
+
   value = <<EOF
 
 1. Decrypt your password using your keybase.io account (PGP key: keybase:${var.keybase}):
