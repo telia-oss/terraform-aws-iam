@@ -2,7 +2,12 @@
 # Variables
 # ------------------------------------------------------------------------------
 variable "name" {
-  description = "The role's name."
+  description = "The name of the role."
+}
+
+variable "policy_arn" {
+  description = "The ARN of the policy you want to apply to the role."
+  default     = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
 variable "trusted_principals" {
