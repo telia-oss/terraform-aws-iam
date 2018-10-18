@@ -32,7 +32,10 @@ module "roles" {
 }
 
 module "machine" {
-  source             = "../../modules/machine-role"
-  name               = "machine-user-role"
-  trusted_principals = "<lambda-function-arn>"
+  source = "../../modules/machine-role"
+  name   = "machine-user-role"
+
+  trusted_principals = [
+    "<lambda-function-arn>",
+  ]
 }
