@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "admin_assume" {
 resource "aws_iam_role" "view_only" {
   name                  = "${local.name_prefix}view-only"
   description           = "View-only role assumable from a trusted account"
-  assume_role_policy    = "${data.aws_iam_policy_document.admin_assume.json}"
+  assume_role_policy    = "${data.aws_iam_policy_document.view_only_assume.json}"
   force_detach_policies = "true"
 }
 
