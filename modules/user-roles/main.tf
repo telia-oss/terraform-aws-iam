@@ -4,12 +4,15 @@
 data "aws_iam_account_alias" "current" {}
 
 locals {
-  name_prefix     = "${var.name_prefix == "" ? "" : "${var.name_prefix}-"}"
-  view_only_users = "${concat(var.admin_users, var.view_only_users)}"
+  name_prefix         = "${var.name_prefix == "" ? "" : "${var.name_prefix}-"}"
+  admin_role_name     = "${local.name_prefix}admin"
+  view_only_role_name = "${local.name_prefix}view-only"
+  iam_boundary_name   = "${local.name_prefix}iam-permissions-boundary"
+  view_only_users     = "${concat(var.admin_users, var.view_only_users)}"
 }
 
 resource "aws_iam_role" "admin" {
-  name                  = "${local.name_prefix}admin"
+  name                  = "${local.admin_role_name}"
   description           = "Admin role assumable from a trusted account"
   assume_role_policy    = "${data.aws_iam_policy_document.admin_assume.json}"
   permissions_boundary  = "${aws_iam_policy.boundary.arn}"
@@ -49,10 +52,10 @@ data "aws_iam_policy_document" "admin_assume" {
 }
 
 resource "aws_iam_role" "view_only" {
-  name                  = "${local.name_prefix}view-only"
+  name                  = "${local.view_only_role_name}"
   description           = "View-only role assumable from a trusted account"
   assume_role_policy    = "${data.aws_iam_policy_document.view_only_assume.json}"
-  permissions_boundary  = "${aws_iam_policy.boundary.arn}"
+  permissions_boundary  = "arn:aws:iam::aws:policy/job-function/ViewOnlyAccess"
   force_detach_policies = "true"
 }
 
