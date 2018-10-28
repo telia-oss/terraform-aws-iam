@@ -34,9 +34,9 @@ data "aws_iam_policy_document" "boundary" {
   statement {
     effect = "Deny"
 
-    # TODO: Figure out the proper scope (or switch to not_actions to allow list/describe etc)
-    actions = [
-      "iam:*",
+    not_actions = [
+      "iam:List*",
+      "iam:Get*",
     ]
 
     resources = [
