@@ -9,7 +9,7 @@ locals {
 }
 
 resource "aws_iam_role" "admin" {
-  name                  = "${local.name_prefix}admin"
+  name                  = "${local.name_prefix}${var.admin_role_suffix}"
   description           = "Admin role assumable from a trusted account"
   assume_role_policy    = "${data.aws_iam_policy_document.admin_assume.json}"
   force_detach_policies = "true"
@@ -48,7 +48,7 @@ data "aws_iam_policy_document" "admin_assume" {
 }
 
 resource "aws_iam_role" "view_only" {
-  name                  = "${local.name_prefix}view-only"
+  name                  = "${local.name_prefix}${var.view_only_role_suffix}"
   description           = "View-only role assumable from a trusted account"
   assume_role_policy    = "${data.aws_iam_policy_document.view_only_assume.json}"
   force_detach_policies = "true"

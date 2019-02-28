@@ -6,6 +6,16 @@ variable "name_prefix" {
   default     = ""
 }
 
+variable "admin_role_suffix" {
+  description = "The suffix appended to the name_prefix for the name of the admin role"
+  default     = "admin"
+}
+
+variable "view_only_role_suffix" {
+  description = "The suffix appended to the name_prefix for the name of the view-only role"
+  default     = "view-only"
+}
+
 variable "trusted_account" {
   description = "ID of the account which is trusted with access to assume this role."
 }

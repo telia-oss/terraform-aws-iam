@@ -7,7 +7,7 @@ A collection of modules for handling IAM setup.
 
 ## Examples
 
-* [Simple Example](examples/default/example.tf)
+* [Simple Example](examples/default/main.tf)
 
 ## Authors
 
