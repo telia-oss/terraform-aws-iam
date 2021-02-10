@@ -7,5 +7,5 @@ locals {
 resource "aws_iam_policy" "iam_self_management" {
   name        = "${local.name_prefix}iam-self-management"
   description = "Allow users to manage their own IAM credentials"
-  policy      = "${data.aws_iam_policy_document.iam_self_management.json}"
+  policy      = data.aws_iam_policy_document.iam_self_management.json
 }

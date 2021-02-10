@@ -86,13 +86,13 @@ data "aws_iam_policy_document" "iam_self_management" {
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:mfa/$${aws:username}",
     ]
 
-    condition = {
+    condition  {
       test     = "Bool"
       variable = "aws:MultiFactorAuthPresent"
       values   = ["true"]
     }
 
-    condition = {
+    condition  {
       test     = "NumericLessThan"
       variable = "aws:MultiFactorAuthAge"
       values   = ["3600"]
@@ -126,7 +126,7 @@ data "aws_iam_policy_document" "iam_self_management" {
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:mfa/$${aws:username}",
     ]
 
-    condition = {
+    condition  {
       test     = "Bool"
       variable = "aws:MultiFactorAuthPresent"
       values   = ["false"]
