@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 locals {
-  name_prefix = "${var.name_prefix == "" ? "" : "${var.name_prefix}-"}"
+  name_prefix = var.name_prefix == "" ? "" : "${var.name_prefix}-"
 }
 
 resource "aws_iam_policy" "iam_self_management" {

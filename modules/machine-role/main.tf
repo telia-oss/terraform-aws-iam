@@ -24,7 +24,7 @@ data "aws_iam_policy_document" "assume" {
       type = "AWS"
 
       identifiers = var.trusted_principals
-      
+
     }
   }
 }

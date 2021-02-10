@@ -4,8 +4,8 @@
 data "aws_iam_account_alias" "current" {}
 
 locals {
-  name_prefix     = "${var.name_prefix == "" ? "" : "${var.name_prefix}-"}"
-  view_only_users = "${concat(var.admin_users, var.view_only_users)}"
+  name_prefix     = var.name_prefix == "" ? "" : "${var.name_prefix}-"
+  view_only_users = concat(var.admin_users, var.view_only_users)
 }
 
 resource "aws_iam_role" "admin" {
@@ -29,19 +29,19 @@ data "aws_iam_policy_document" "admin_assume" {
       type = "AWS"
 
       identifiers = formatlist("arn:aws:iam::%s:user/%s", var.trusted_account, var.admin_users)
-      
+
     }
 
-    condition  {
+    condition {
       test     = "Bool"
       variable = "aws:MultiFactorAuthPresent"
       values   = ["true"]
     }
 
-    condition  {
+    condition {
       test     = "NumericLessThan"
       variable = "aws:MultiFactorAuthAge"
-      values   = ["${var.admin_mfa_window * 3600}"]
+      values   = [var.admin_mfa_window * 3600]
     }
   }
 }
@@ -66,20 +66,20 @@ data "aws_iam_policy_document" "view_only_assume" {
     principals {
       type = "AWS"
 
-      identifiers = formatlist("arn:aws:iam::%s:user/%s" , var.trusted_account,local.view_only_users)
-      
+      identifiers = formatlist("arn:aws:iam::%s:user/%s", var.trusted_account, local.view_only_users)
+
     }
 
-    condition  {
+    condition {
       test     = "Bool"
       variable = "aws:MultiFactorAuthPresent"
       values   = ["true"]
     }
 
-    condition  {
+    condition {
       test     = "NumericLessThan"
       variable = "aws:MultiFactorAuthAge"
-      values   = ["${var.view_only_mfa_window * 3600}"]
+      values   = [var.view_only_mfa_window * 3600]
     }
   }
 }

@@ -2,9 +2,9 @@
 # Output
 # ------------------------------------------------------------------------------
 output "name" {
-  value = "${aws_iam_role.main.name}"
+  value = aws_iam_role.main.name
 }
 
 output "arn" {
-  value = "${aws_iam_role.main.arn}"
+  value = aws_iam_role.main.arn
 }

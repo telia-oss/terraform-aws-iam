@@ -1,5 +1,6 @@
 terraform {
-  required_version = "~> 0.13"
+  required_version = "~> 0.14"
+
 
   # backend "s3" {
   #   key            = "terraform-modules/development/terraform-module-template/default.tfstate"
@@ -13,8 +14,8 @@ terraform {
 }
 
 provider "aws" {
-  version = "3.27.0"
-  region  = "eu-west-1"
+  #version = "3.27.0" This is moved into required_providers block on terraform 0.14
+  region = "eu-west-1"
   #allowed_account_ids = ["<test-account-id>"]
 }
 
