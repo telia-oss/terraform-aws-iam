@@ -2,11 +2,11 @@
 # Output
 # ------------------------------------------------------------------------------
 output "admin_role_name" {
-  value = "${aws_iam_role.admin.name}"
+  value = aws_iam_role.admin.name
 }
 
 output "admin_role_arn" {
-  value = "${aws_iam_role.admin.arn}"
+  value = aws_iam_role.admin.arn
 }
 
 output "admin_role_url" {
@@ -14,11 +14,11 @@ output "admin_role_url" {
 }
 
 output "view_only_role_name" {
-  value = "${aws_iam_role.view_only.name}"
+  value = aws_iam_role.view_only.name
 }
 
 output "view_only_role_arn" {
-  value = "${aws_iam_role.view_only.arn}"
+  value = aws_iam_role.view_only.arn
 }
 
 output "view_only_role_url" {

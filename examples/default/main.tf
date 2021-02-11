@@ -1,5 +1,6 @@
 terraform {
-  required_version = "0.11.11"
+  required_version = "~> 0.14"
+
 
   backend "s3" {
     key            = "terraform-modules/development/terraform-module-template/default.tfstate"
@@ -13,8 +14,8 @@ terraform {
 }
 
 provider "aws" {
-  version             = "1.60.0"
-  region              = "eu-west-1"
+  #version = "3.27.0" This is moved into required_providers block on terraform 0.14
+  region = "eu-west-1"
   allowed_account_ids = ["<test-account-id>"]
 }
 
@@ -24,7 +25,7 @@ module "admin" {
   source  = "../../modules/user"
   name    = "first.last.admin"
   path    = "/admins/"
-  keybase = "itsdalmo"
+  keybase = "rickardlofstrom"
 }
 
 module "user_policy" {
@@ -36,12 +37,12 @@ module "developer" {
 
   name    = "first.last.developer"
   path    = "/developer/"
-  keybase = "itsdalmo"
+  keybase = "rickardlofstrom"
 }
 
 module "user_roles" {
   source                = "../../modules/user-roles"
-  trusted_account       = "${data.aws_caller_identity.current.account_id}"
+  trusted_account       = data.aws_caller_identity.current.account_id
   view_only_role_suffix = "read-only"
   admin_role_suffix     = "administrator"
 
@@ -59,12 +60,12 @@ module "machine_role" {
   name   = "machine-user-role"
 
   trusted_principals = [
-    "${aws_iam_role.example-lambda-role.arn}",
+    aws_iam_role.example_lambda_role.arn,
   ]
 }
 
-resource "aws_iam_role" "example-lambda-role" {
-  name = "example-lambda-role"
+resource "aws_iam_role" "example_lambda_role" {
+  name = "example_lambda_role"
 
   assume_role_policy = <<EOF
 {
@@ -84,13 +85,13 @@ EOF
 
 resource "aws_iam_role_policy_attachment" "basic-exec" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-  role       = "${aws_iam_role.example-lambda-role.name}"
+  role       = aws_iam_role.example_lambda_role.name
 }
 
 resource "aws_lambda_function" "example" {
   function_name = "example-lambda-function"
   handler       = "lambda.handler"
-  role          = "${aws_iam_role.example-lambda-role.arn}"
-  runtime       = "nodejs8.10"
+  role          = aws_iam_role.example_lambda_role.arn
+  runtime       = "nodejs14.x"
   filename      = "lambda.zip"
 }

@@ -3,12 +3,12 @@
 # ------------------------------------------------------------------------------
 output "name" {
   description = "The user's name."
-  value       = "${aws_iam_user.main.name}"
+  value       = aws_iam_user.main.name
 }
 
 output "keybase" {
   description = "Keybase username used to encrypt the user's initial password."
-  value       = "${var.keybase}"
+  value       = var.keybase
 }
 
 output "instructions" {
